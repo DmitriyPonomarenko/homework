@@ -1,4 +1,6 @@
-package part1.lesson02.task03;
+package part1.lesson02.task03.sorters;
+
+import part1.lesson02.task03.entity.Person;
 
 import java.util.Arrays;
 

@@ -1,9 +1,11 @@
-package part1.lesson02.task03;
+package part1.lesson02.task03.entity;
+
+import java.util.Objects;
 
 /**
  * человек
  */
-public class Person implements Comparable<Person>{
+public class Person implements Comparable<Person> {
 
     private int age;
     private Sex sex;
@@ -14,7 +16,7 @@ public class Person implements Comparable<Person>{
     }
 
     public void setAge(int age) {
-        if(age < 0 || age > 100) throw new IllegalArgumentException("0 <= age <= 100");
+        if (age < 0 || age > 100) throw new IllegalArgumentException("0 <= age <= 100");
         this.age = age;
     }
 
@@ -36,9 +38,9 @@ public class Person implements Comparable<Person>{
 
     @Override
     public int compareTo(Person anotherPerson) {
-        if(this.getSex() == Sex.MAN && anotherPerson.getSex() == Sex.WOMAN) return -1;
-        if(this.getSex() == Sex.WOMAN && anotherPerson.getSex() == Sex.MAN) return 1;
-        if(this.getAge() != anotherPerson.getAge()) return - Integer.compare(this.getAge(), anotherPerson.getAge());
+        if (this.getSex() == Sex.MAN && anotherPerson.getSex() == Sex.WOMAN) return -1;
+        if (this.getSex() == Sex.WOMAN && anotherPerson.getSex() == Sex.MAN) return 1;
+        if (this.getAge() != anotherPerson.getAge()) return -Integer.compare(this.getAge(), anotherPerson.getAge());
         return this.getName().compareTo(anotherPerson.getName());
     }
 
@@ -52,9 +54,13 @@ public class Person implements Comparable<Person>{
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(age, name);
+    }
+
+    @Override
     public String toString() {
         return "age = " + this.getAge() + "; sex = " + this.getSex() + "; name = '" + this.getName() + "'";
     }
-}
 
-enum Sex{MAN, WOMAN}
+}

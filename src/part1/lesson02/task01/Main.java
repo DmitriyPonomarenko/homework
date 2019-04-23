@@ -11,7 +11,8 @@ public class Main {
         String outString = "Hello, World!";
         outString(outString);
         try {
-            outString(null);
+            String string = null;
+            outString(string);
         } catch (NullPointerException npe) {
             try {
                 char[] charArray = outString.toCharArray();
