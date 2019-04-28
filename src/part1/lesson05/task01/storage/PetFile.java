@@ -40,12 +40,7 @@ public class PetFile {
 
     private void addIndexes(Pet pet) {
         idPets.put(pet.getUid(), pet);
-        List<Pet> listPet = findPets.get(pet.getName());
-        if (listPet == null) {
-            listPet = new ArrayList<>();
-            findPets.put(pet.getName(), listPet);
-        }
-        listPet.add(pet);
+        findPets.computeIfAbsent(pet.getName(), k -> new ArrayList<>()).add(pet);
     }
 
     /**
