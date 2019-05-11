@@ -60,7 +60,10 @@ public class Person implements Comparable<Person> {
 
     @Override
     public String toString() {
-        return "age = " + this.getAge() + "; sex = " + this.getSex() + "; name = '" + this.getName() + "'";
+        return "Person{" +
+                "age=" + age +
+                ", sex=" + sex +
+                ", name='" + name + '\'' +
+                '}';
     }
-
 }
