@@ -1,26 +1,21 @@
 package part1.lesson10.task01.server;
 
 import part1.lesson10.task01.messages.Message;
+import part1.lesson10.task01.server.connections.ClientConnection;
 
-import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.net.Socket;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 class ClientSender implements Runnable {
 
     private ServerChat serverChat;
-    private Socket clientSocket;
-    private ObjectOutputStream oos;
-    private String clientName;
+    private ClientConnection clientConnection;
     private final Queue<Message> messages = new ConcurrentLinkedQueue<>();
 
-    ClientSender(ServerChat chat, Socket socket, String name) throws IOException {
+    ClientSender(ServerChat chat, ClientConnection connection) {
         serverChat = chat;
-        clientSocket = socket;
-        oos = new ObjectOutputStream(clientSocket.getOutputStream());
-        clientName = name;
+        clientConnection = connection;
     }
 
     void sendMessage(Message message) {
@@ -29,8 +24,11 @@ class ClientSender implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
-            try {
+        try {
+            ObjectOutputStream oos = clientConnection.getOos();
+
+            //noinspection InfiniteLoopStatement
+            while (true) {
                 Message message = messages.poll();
                 if (message != null) {
                     oos.writeObject(message);
@@ -40,15 +38,11 @@ class ClientSender implements Runnable {
                 } catch (InterruptedException e) {
                     System.out.println(e.toString());
                 }
-            } catch (Exception e) {
-                serverChat.disconnectClient(clientSocket);
-                return;
             }
+        } catch (Exception e) {
+            messages.clear();
+            serverChat.disconnectClient(clientConnection);
         }
-    }
-
-    String getClientName() {
-        return clientName;
     }
 
 }
