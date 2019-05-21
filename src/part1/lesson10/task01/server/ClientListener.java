@@ -3,45 +3,47 @@ package part1.lesson10.task01.server;
 import part1.lesson10.task01.messages.ErrorMessage;
 import part1.lesson10.task01.messages.Message;
 import part1.lesson10.task01.messages.SenderMessage;
+import part1.lesson10.task01.server.connections.ClientConnection;
 import part1.lesson10.task01.server.exceptions.DuplicateNameException;
 
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.Socket;
 
 class ClientListener implements Runnable {
 
     private ServerChat serverChat;
-    private Socket clientSocket;
-    private ObjectInputStream ois;
-    private ObjectOutputStream oos;
+    private ClientConnection clientConnection;
 
-    ClientListener(ServerChat chat, Socket socket) throws IOException {
+    ClientListener(ServerChat chat, ClientConnection connection) {
         serverChat = chat;
-        clientSocket = socket;
-        ois = new ObjectInputStream(clientSocket.getInputStream());
-        oos = new ObjectOutputStream(clientSocket.getOutputStream());
+        clientConnection = connection;
     }
 
     @Override
     public void run() {
-        while (true) {
-            try {
-                Object object = ois.readObject();
-                if (object instanceof SenderMessage) {
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(clientConnection.getSocket().getOutputStream());
+            ObjectInputStream ois = new ObjectInputStream(clientConnection.getSocket().getInputStream());
+            clientConnection.setOos(oos);
+
+            //noinspection InfiniteLoopStatement
+            while (true) {
+                Message message = (Message) ois.readObject();
+                if (message instanceof SenderMessage) {
                     try {
-                        serverChat.connectClient(clientSocket, ((SenderMessage) object).getClientName());
+                        serverChat.connectClient(clientConnection, ((SenderMessage) message).getClientName());
                     } catch (DuplicateNameException e) {
                         oos.writeObject(new ErrorMessage(e.getMessage()));
                     }
-                } else if (object instanceof Message) {
-                    serverChat.sendMessage((Message) object);
+                } else {
+                    String clientName = clientConnection.getName();
+                    if (clientName != null) {
+                        serverChat.sendMessage(new SenderMessage(clientName, message.getText()));
+                    }
                 }
-            } catch (Exception e) {
-                serverChat.disconnectClient(clientSocket);
-                return;
             }
+        } catch (Exception e) {
+            serverChat.disconnectClient(clientConnection);
         }
     }
 }
