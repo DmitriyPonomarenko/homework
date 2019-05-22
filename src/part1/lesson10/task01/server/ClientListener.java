@@ -9,6 +9,9 @@ import part1.lesson10.task01.server.exceptions.DuplicateNameException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+/**
+ * слушатель входящего потока от клиента
+ */
 class ClientListener implements Runnable {
 
     private ServerChat serverChat;
@@ -36,7 +39,7 @@ class ClientListener implements Runnable {
                         oos.writeObject(new ErrorMessage(e.getMessage()));
                     }
                 } else {
-                    String clientName = clientConnection.getName();
+                    String clientName = clientConnection.getClientName();
                     if (clientName != null) {
                         serverChat.sendMessage(new SenderMessage(clientName, message.getText()));
                     }

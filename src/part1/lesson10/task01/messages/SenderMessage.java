@@ -1,5 +1,8 @@
 package part1.lesson10.task01.messages;
 
+/**
+ * сообщение, содержащее информацию об отправителе
+ */
 public class SenderMessage extends Message {
 
     private String clientName;

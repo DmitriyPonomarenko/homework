@@ -1,12 +1,19 @@
 package part1.lesson10.task01.properties;
 
+/**
+ * хранилище настроек
+ */
 public class Properties {
 
-    public String getHost() {
+    public static String getHost() {
         return "localhost";
     }
 
-    public int getPort() {
+    public static int getPort() {
         return 1152;
+    }
+
+    public static int getDelayInMillis() {
+        return 1000;
     }
 }

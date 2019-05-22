@@ -1,5 +1,8 @@
 package part1.lesson10.task01.server.texts;
 
+/**
+ * Текстовые ресурсы
+ */
 public class TextMessage {
 
     public static String NEW_CLIENT = " присоединился к чату";

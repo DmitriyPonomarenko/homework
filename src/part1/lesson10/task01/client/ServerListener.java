@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 
+/**
+ * слушатель входящего потока от сервера
+ */
 public class ServerListener implements Runnable {
 
     private Socket socket;
@@ -17,6 +20,7 @@ public class ServerListener implements Runnable {
         ois = new ObjectInputStream(socket.getInputStream());
     }
 
+    @Override
     public void run() {
         try {
             //noinspection InfiniteLoopStatement
@@ -34,6 +38,12 @@ public class ServerListener implements Runnable {
         }
     }
 
+    /**
+     * обработчик входящих сообщений
+     *
+     * @return входящее сообщение
+     * @throws IOException ошибка ввода-вывода
+     */
     public Message getMessage() throws IOException {
         Message message;
         try {
@@ -42,7 +52,7 @@ public class ServerListener implements Runnable {
             throw new IOException(e.getMessage());
         }
         if (message instanceof SenderMessage) {
-            System.out.print(((SenderMessage)message).getClientName() + ":");
+            System.out.print(((SenderMessage) message).getClientName() + ":");
         }
         System.out.println(message.getText());
         return message;

@@ -14,6 +14,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+/**
+ * Реализует функционал сервера чата
+ */
 public class ServerChat {
 
     private final ConcurrentMap<String, ClientSender> clients = new ConcurrentHashMap<>();
@@ -22,8 +25,13 @@ public class ServerChat {
         new ServerChat().doWork();
     }
 
+    /**
+     * принимает входящие соединения и создает для каждого поток-слушатель
+     *
+     * @throws IOException если не удалось зарегистрировать порт
+     */
     private void doWork() throws IOException {
-        ServerSocket serverSocket = new ServerSocket(new Properties().getPort());
+        ServerSocket serverSocket = new ServerSocket(Properties.getPort());
         //noinspection InfiniteLoopStatement
         while (true) {
             try {
@@ -36,6 +44,13 @@ public class ServerChat {
         }
     }
 
+    /**
+     * регистрация нового клиента
+     *
+     * @param clientConnection клиентское соединение
+     * @param clientName       имя клиента
+     * @throws DuplicateNameException если клиент с таким именем уже есть
+     */
     void connectClient(ClientConnection clientConnection, String clientName) throws DuplicateNameException {
         ClientSender clientSender;
         synchronized (clients) {
@@ -43,7 +58,7 @@ public class ServerChat {
             if (clientSender != null) {
                 throw new DuplicateNameException(TextMessage.DUPLICATE_NAME);
             }
-            clientConnection.setName(clientName);
+            clientConnection.setClientName(clientName);
             clientSender = new ClientSender(this, clientConnection);
             clients.put(clientName, clientSender);
         }
@@ -51,8 +66,13 @@ public class ServerChat {
         sendMessage(new Message(clientName + TextMessage.NEW_CLIENT));
     }
 
+    /**
+     * разрывает соединение с клиентом
+     *
+     * @param clientConnection клиентское соединение
+     */
     void disconnectClient(ClientConnection clientConnection) {
-        String clientName = clientConnection.getName();
+        String clientName = clientConnection.getClientName();
         if (clientName != null) {
             ClientSender clientSender = clients.remove(clientName);
             if (clientSender != null) {
@@ -66,6 +86,11 @@ public class ServerChat {
         }
     }
 
+    /**
+     * broadcast рассылка
+     *
+     * @param message сообщение
+     */
     void sendMessage(Message message) {
         for (Map.Entry<String, ClientSender> clientEntry : clients.entrySet()) {
             if (message instanceof SenderMessage) {

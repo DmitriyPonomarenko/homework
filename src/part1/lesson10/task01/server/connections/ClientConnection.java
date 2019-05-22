@@ -3,11 +3,14 @@ package part1.lesson10.task01.server.connections;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+/**
+ * соединение с клиентом чата
+ */
 public class ClientConnection {
 
     private Socket socket;
     private ObjectOutputStream oos;
-    private String name;
+    private String clientName;
 
     public ClientConnection(Socket socket) {
         this.socket = socket;
@@ -25,11 +28,11 @@ public class ClientConnection {
         this.oos = oos;
     }
 
-    public String getName() {
-        return name;
+    public String getClientName() {
+        return clientName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
     }
 }

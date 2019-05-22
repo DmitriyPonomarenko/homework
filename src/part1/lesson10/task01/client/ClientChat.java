@@ -11,18 +11,28 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
 
+/**
+ * Реализует функционал клиента чата
+ */
 public class ClientChat {
 
     private Socket socket;
     private ObjectOutputStream oos;
     private Scanner scanner = new Scanner(System.in);
 
+    /**
+     * установка соединения с сервером
+     *
+     * @throws IOException нет соединения
+     */
     public ClientChat() throws IOException {
-        Properties properties = new Properties();
-        socket = new Socket(properties.getHost(), properties.getPort());
+        socket = new Socket(Properties.getHost(), Properties.getPort());
         oos = new ObjectOutputStream(socket.getOutputStream());
     }
 
+    /**
+     * цикл отправки сообщений на сервер
+     */
     public void doWork() {
         try {
             ServerListener listener = new ServerListener(socket);
@@ -45,12 +55,24 @@ public class ClientChat {
         }
     }
 
+    /**
+     * регистрация пользователя на сервере
+     *
+     * @param listener слушатель входящего потока
+     * @return результат регистрации
+     * @throws IOException если регистрация не прошла
+     */
     private boolean login(ServerListener listener) throws IOException {
         oos.writeObject(new SenderMessage(getName()));
         Message message = listener.getMessage();
         return !(message instanceof ErrorMessage);
     }
 
+    /**
+     * получение имени пользователя
+     *
+     * @return имя пользователя
+     */
     private String getName() {
         System.out.print(TextMessage.NEW_CLIENT);
         return scanner.nextLine();
