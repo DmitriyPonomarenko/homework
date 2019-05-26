@@ -42,11 +42,10 @@ class ClientListener implements Runnable {
                 } else {
                     String clientName = clientConnection.getClientName();
                     if (clientName != null) {
+                        SenderMessage senderMessage = new SenderMessage(clientName, message.getText());
                         if (message instanceof UnicastMessage) {
-                            SenderMessage senderMessage = new SenderMessage("private " + clientName, message.getText());
                             serverChat.sendUnicastMessage(senderMessage, ((UnicastMessage) message).getAddresseeName());
                         } else {
-                            SenderMessage senderMessage = new SenderMessage(clientName, message.getText());
                             serverChat.sendMessage(senderMessage);
                         }
                     }

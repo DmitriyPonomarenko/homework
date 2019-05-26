@@ -109,6 +109,7 @@ public class ServerChat {
      * @param addresseeName адресат
      */
     void sendUnicastMessage(SenderMessage message, String addresseeName) {
+        if (message.getClientName().equals(addresseeName)) return;
         ClientSender sender = clients.get(addresseeName);
         if (sender == null) {
             sendUnicastMessage(new SenderMessage("server", TextMessage.ADDRESSEE_NOT_FOUND), message.getClientName());
