@@ -40,6 +40,9 @@ public class ClientChat {
             //noinspection StatementWithEmptyBody
             while (!login(listener)) ;
             new Thread(listener).start();
+            Thread broadcastListenerThread = new Thread(new ServerUDPListener(Properties.getPort()));
+            broadcastListenerThread.setDaemon(true);
+            broadcastListenerThread.start();
             String line;
             while (!(line = scanner.nextLine()).equals(TextMessage.QUIT_COMMAND)) {
                 int pos = line.indexOf(':');

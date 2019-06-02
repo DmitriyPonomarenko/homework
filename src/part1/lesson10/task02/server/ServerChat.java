@@ -7,10 +7,11 @@ import part1.lesson10.task02.server.connections.ClientConnection;
 import part1.lesson10.task02.server.exceptions.DuplicateNameException;
 import part1.lesson10.task02.server.texts.TextMessage;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.Map;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.net.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -92,13 +93,19 @@ public class ServerChat {
      * @param message сообщение
      */
     void sendMessage(Message message) {
-        for (Map.Entry<String, ClientSender> clientEntry : clients.entrySet()) {
-            if (message instanceof SenderMessage) {
-                if (clientEntry.getKey().equals(((SenderMessage) (message)).getClientName())) {
-                    continue;
-                }
+        try (DatagramSocket socket = new DatagramSocket()) {
+            socket.setBroadcast(true);
+            byte[] buffer;
+            try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                 ObjectOutput oos = new ObjectOutputStream(baos)) {
+                oos.writeObject(message);
+                buffer = baos.toByteArray();
             }
-            clientEntry.getValue().sendMessage(message);
+            InetAddress broadcastAddress = InetAddress.getByName("255.255.255.255");
+            DatagramPacket packet = new DatagramPacket(buffer, buffer.length, broadcastAddress, Properties.getPort());
+            socket.send(packet);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

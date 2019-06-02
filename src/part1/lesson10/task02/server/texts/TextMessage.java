@@ -9,4 +9,5 @@ public class TextMessage {
     public static String CLIENT_EXIT = " покинул чат";
     public static String DUPLICATE_NAME = "Такое имя уже используется";
     public static String ADDRESSEE_NOT_FOUND = "Адресат не найден";
+    public static String HELLO_CLIENT = " приветствуем Вас на нашем сервере!";
 }

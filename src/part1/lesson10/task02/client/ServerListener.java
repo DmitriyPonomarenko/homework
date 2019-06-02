@@ -52,7 +52,7 @@ public class ServerListener implements Runnable {
             throw new IOException(e.getMessage());
         }
         if (message instanceof SenderMessage) {
-            System.out.print(((SenderMessage) message).getClientName() + ":");
+            System.out.print("private " + ((SenderMessage) message).getClientName() + ":");
         }
         System.out.println(message.getText());
         return message;

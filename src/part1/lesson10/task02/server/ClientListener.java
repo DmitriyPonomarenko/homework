@@ -6,6 +6,7 @@ import part1.lesson10.task02.messages.SenderMessage;
 import part1.lesson10.task02.messages.UnicastMessage;
 import part1.lesson10.task02.server.connections.ClientConnection;
 import part1.lesson10.task02.server.exceptions.DuplicateNameException;
+import part1.lesson10.task02.server.texts.TextMessage;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -35,7 +36,9 @@ class ClientListener implements Runnable {
                 Message message = (Message) ois.readObject();
                 if (message instanceof SenderMessage) {
                     try {
-                        serverChat.connectClient(clientConnection, ((SenderMessage) message).getClientName());
+                        String clientName = ((SenderMessage) message).getClientName();
+                        serverChat.connectClient(clientConnection, clientName);
+                        oos.writeObject(new Message(clientName + TextMessage.HELLO_CLIENT));
                     } catch (DuplicateNameException e) {
                         oos.writeObject(new ErrorMessage(e.getMessage()));
                     }
