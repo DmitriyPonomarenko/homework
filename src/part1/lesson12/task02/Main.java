@@ -16,7 +16,9 @@ public class Main {
         while (true) {
             ClassLoader cl = new MyClassLoader();
             Class<?> someClass = cl.loadClass("part1.lesson09.task01.worker.SomeClass");
-            list.add(someClass);
+            if (Math.random() <= 0.5) {
+                list.add(someClass);
+            }
         }
     }
 

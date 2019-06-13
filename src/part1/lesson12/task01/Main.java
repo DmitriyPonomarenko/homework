@@ -13,7 +13,10 @@ public class Main {
         List<String> list = new ArrayList<>();
         int i = 1;
         while (true) {
-            list.add(String.valueOf(i++));
+            String element = String.valueOf(i);
+            if (i++ % 2 == 0) {
+                list.add(element);
+            }
         }
     }
 }
