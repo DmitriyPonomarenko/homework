@@ -6,6 +6,9 @@ import part3.lesson15.entity.User;
 
 import java.sql.Connection;
 
+/**
+ * Сделать параметризированную выборку по login_ID и name одновременно
+ */
 public class Main {
 
     public static void main(String[] args) {

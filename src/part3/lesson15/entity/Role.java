@@ -1,16 +1,11 @@
 package part3.lesson15.entity;
 
 public class Role {
-    private Integer id;
     private RoleName name;
     private String description;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
+    public Role(RoleName roleName) {
+        setName(roleName);
     }
 
     public RoleName getName() {
@@ -19,6 +14,11 @@ public class Role {
 
     public void setName(RoleName name) {
         this.name = name;
+    }
+
+    public Integer getId() {
+        if (name == null) return null;
+        return name.number;
     }
 
     public String getDescription() {

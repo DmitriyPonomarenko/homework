@@ -8,6 +8,9 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Через jdbc интерфейс сделать запись данных(INSERT) в таблицу
+ */
 public class Main {
 
     private static UserDao userDao;
@@ -22,6 +25,9 @@ public class Main {
         }
     }
 
+    /**
+     * a)      Используя параметризированный запрос
+     */
     private static void insertUser() {
         User user = new User();
         user.setName("name1");
@@ -29,6 +35,9 @@ public class Main {
         userDao.insertUser(user);
     }
 
+    /**
+     * b)      Используя batch процесс
+     */
     private static void insertUsers() {
         List<User> userList = new ArrayList<>();
         for (int i = 2; i <= 10; i++) {

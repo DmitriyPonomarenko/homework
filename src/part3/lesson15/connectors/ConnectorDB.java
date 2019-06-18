@@ -7,6 +7,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+/**
+ * отвечает за создание соединения с БД
+ */
 public class ConnectorDB {
 
     public static Connection getConnection() throws IOException, SQLException {
