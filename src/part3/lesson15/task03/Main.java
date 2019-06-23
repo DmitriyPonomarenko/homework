@@ -15,7 +15,7 @@ public class Main {
         try (Connection connection = ConnectorDB.getConnection()) {
             UserDao userDao = new UserDao(connection);
             User user = userDao.getUser("name1", "login1");
-            System.out.println(user);
+            System.out.println("User = " + user);
         } catch (Exception e) {
             e.printStackTrace();
         }

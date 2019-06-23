@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+        <JDBC name="databaseAppender" tableName="&quot;LOGS&quot;" truncateStrings="false">
+            <ConnectionFactory class="part3.lesson15.connectors.ConnectorDB" method="getConnection" />
+            <Column name="&quot;DATE&quot;" isEventTimestamp="true" isUnicode="false"/>
+            <Column name="&quot;LOG_LEVEL&quot;" pattern="%level" isUnicode="false"/>
+            <Column name="&quot;MESSAGE&quot;" pattern="%message" isUnicode="false"/>
+            <Column name="&quot;EXCEPTION&quot;" pattern="%ex{full}" isUnicode="false"/>
+        </JDBC>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="databaseAppender"/>
+        </Root>
+    </Loggers>
+</Configuration>

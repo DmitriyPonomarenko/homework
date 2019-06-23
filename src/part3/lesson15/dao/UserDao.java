@@ -1,5 +1,8 @@
 package part3.lesson15.dao;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import part3.lesson15.entity.User;
 
 import java.sql.*;
@@ -7,7 +10,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class UserDao {
+
     private Connection connection;
+
+    private static Logger logger = LogManager.getLogger(UserDao.class);
 
     public UserDao(Connection connection) {
         this.connection = connection;
@@ -27,9 +33,11 @@ public class UserDao {
             pstmt.setString(4, user.getCity());
             pstmt.setString(5, user.getEmail());
             pstmt.setString(6, user.getDescription());
-            return pstmt.executeUpdate() == 1;
+            boolean result = pstmt.executeUpdate() == 1;
+            logger.log(Level.INFO, "insert " + user);
+            return result;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.log(Level.ERROR, user, e);
             return false;
         }
     }
@@ -51,10 +59,11 @@ public class UserDao {
                 pstmt.setString(6, user.getDescription());
                 pstmt.addBatch();
             }
-            int[] result = pstmt.executeBatch();
-            return Arrays.stream(result).sum() == userList.size();
+            boolean result = Arrays.stream(pstmt.executeBatch()).sum() == userList.size();
+            logger.log(Level.INFO, result + " insert users");
+            return result;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.log(Level.ERROR, "Can't insert users", e);
             return false;
         }
     }
@@ -76,8 +85,9 @@ public class UserDao {
                 user.setEmail(rs.getString("email"));
                 user.setDescription(rs.getString("description"));
             }
+            logger.log(Level.INFO, user);
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.log(Level.ERROR, "Can't get user", e);
         }
         return user;
     }

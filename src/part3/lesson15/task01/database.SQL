@@ -56,3 +56,17 @@ INSERT INTO public."ROLE" (id, name, description)
 VALUES (2, 'Clients', null);
 INSERT INTO public."ROLE" (id, name, description)
 VALUES (3, 'Billing', null);
+
+create table "LOGS"
+(
+    "ID"        bigserial not null
+        constraint """LOGS""_pk"
+            primary key,
+    "DATE"      timestamp not null,
+    "LOG_LEVEL" varchar   not null,
+    "MESSAGE"   varchar   not null,
+    "EXCEPTION" varchar
+);
+
+alter table "LOGS"
+    owner to postgres;
