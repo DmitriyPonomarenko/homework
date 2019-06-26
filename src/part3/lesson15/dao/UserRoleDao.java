@@ -1,6 +1,5 @@
 package part3.lesson15.dao;
 
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import part3.lesson15.entity.Role;
@@ -27,10 +26,10 @@ public class UserRoleDao {
             pstmt.setInt(1, user.getId());
             pstmt.setInt(2, role.getId());
             boolean result = pstmt.executeUpdate() == 1;
-            logger.log(Level.INFO, "insert " + role + " for " + user);
+            logger.info("insert " + role + " for " + user);
             return result;
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "Can't insert user's role", e);
+            logger.error("Can't insert user's role", e);
             return false;
         }
     }

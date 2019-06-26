@@ -1,6 +1,5 @@
 package part3.lesson15.dao;
 
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import part3.lesson15.entity.User;
@@ -34,10 +33,10 @@ public class UserDao {
             pstmt.setString(5, user.getEmail());
             pstmt.setString(6, user.getDescription());
             boolean result = pstmt.executeUpdate() == 1;
-            logger.log(Level.INFO, "insert " + user);
+            logger.info("insert " + user);
             return result;
         } catch (SQLException e) {
-            logger.log(Level.ERROR, user, e);
+            logger.error(user, e);
             return false;
         }
     }
@@ -60,10 +59,10 @@ public class UserDao {
                 pstmt.addBatch();
             }
             boolean result = Arrays.stream(pstmt.executeBatch()).sum() == userList.size();
-            logger.log(Level.INFO, result + " insert users");
+            logger.info(result + " insert users");
             return result;
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "Can't insert users", e);
+            logger.error("Can't insert users", e);
             return false;
         }
     }
@@ -85,9 +84,9 @@ public class UserDao {
                 user.setEmail(rs.getString("email"));
                 user.setDescription(rs.getString("description"));
             }
-            logger.log(Level.INFO, user);
+            logger.info(user);
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "Can't get user", e);
+            logger.error("Can't get user", e);
         }
         return user;
     }

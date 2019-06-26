@@ -1,5 +1,7 @@
 package part3.lesson15.task02;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import part3.lesson15.connectors.ConnectorDB;
 import part3.lesson15.dao.UserDao;
 import part3.lesson15.entity.User;
@@ -21,7 +23,8 @@ public class Main {
             insertUser();
             insertUsers();
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger logger = LogManager.getLogger(Main.class);
+            logger.error("Can't connect to DB", e);
         }
     }
 
